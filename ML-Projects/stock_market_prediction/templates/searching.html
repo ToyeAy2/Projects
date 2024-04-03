@@ -1,0 +1,155 @@
+{% extends 'header1.html'%}
+{% block content %}
+ <meta charset="utf-8" />
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>Stock Market</title>
+
+    <!-- import plugin script -->
+    <script src='/static/js/Chart.min.js'></script>
+    <style>
+      h3{
+        width: 38%;
+        margin: auto;
+        padding: 15px 0;
+        background: rgba(0,0,0,0.1);
+        color: black;
+        display: flex;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      input::placeholder{
+        width: 38%;
+        margin: auto;
+        padding: 15px 0;
+        /* background: rgba(0,0,0,0.1); */
+        color: black;
+        display: flex;
+        text-transform: uppercase;
+      }
+
+      .autocomplete-input{
+        color: aliceblue;
+        text-decoration: floralwhite;
+      }
+      .btn{
+        align-items: center;
+        -webkit-transition: all 150ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+      }
+
+      /* Navbar container */
+      .navbar {
+        overflow: hidden;
+        background-color: #333;
+        font-family: Arial;
+      }
+
+      /* Links inside the navbar */
+      .navbar a {
+        float: left;
+        font-size: 16px;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      /* The dropdown container */
+      .dropdown {
+        float: left;
+        overflow: hidden;
+      }
+
+      /* Dropdown button */
+      .dropdown .dropbtn {
+        font-size: 16px;
+        border: none;
+        outline: none;
+        color: white;
+        padding: 14px 16px;
+        background-color: inherit;
+        font-family: inherit; /* Important for vertical align on mobile phones */
+        margin: 0; /* Important for vertical align on mobile phones */
+      }
+
+      /* Add a red background color to navbar links on hover */
+      .navbar a:hover, .dropdown:hover .dropbtn {
+        background-color: red;
+      }
+
+      /* Dropdown content (hidden by default) */
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+
+      /* Links inside the dropdown */
+      .dropdown-content a {
+        float: none;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+      }
+
+      /* Add a grey background color to dropdown links on hover */
+      .dropdown-content a:hover {
+        background-color: #ddd;
+      }
+
+      /* Show the dropdown menu on hover */
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+    </style>
+
+<div class="breadcrumb-agile">
+  <div aria-label="breadcrumb" style="color: #000000;">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="/searchsing" style="color: #000000;">Back |</a>
+      </li>
+      <li class="breadcrumb-item" style="color: #f44336;" aria-current="page">Compare Company Stock |</li>
+      <a class="breadcrumb-item" style="color: #000000;" href="/searchsing" aria-current="page">Search Single Company Stock</a>
+    </ol>
+  </div>
+</div>
+
+  <body><br><br><br>
+    <h3 style="align-items:center;width:max-content;padding:15px;">Compare Company Stocks</h3><br><br><br>
+    <!-- bar chart canvas element -->
+    <div class="row">
+      <div class="col s12">
+        <div class="row">
+          <div class="input-field col s12">
+            <form action="/searchforcompany" method="POST" autocomplete="off">
+              <input type="text" id="autocomplete-input" name="company1" placeholder="Please enter company name" class="autocomplete"><br><br>
+              <input type="text" id="autocomplete-input" name="company2" placeholder="Please enter company name" class="autocomplete"><br><br>
+              <center><input class="btn" type="submit" value="submit"/></center>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    $(document).ready(function(){
+      $('input.autocomplete').autocomplete({
+        data: {{values | safe}}
+      });
+    });
+  </script>
+
+{% endblock%}

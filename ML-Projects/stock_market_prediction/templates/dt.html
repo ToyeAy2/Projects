@@ -1,0 +1,80 @@
+{% extends 'header1.html'%}
+{% block content %}
+ <meta charset="utf-8" />
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <title>Stock Market</title>
+
+    <!-- import plugin script -->
+    <script src='/static/js/Chart.min.js'></script>
+    <style>
+      h3{
+        width: 38%;
+        margin: auto;
+        padding: 15px 0;
+        background: rgba(0,0,0,0.1);
+        color: black;
+        display: flex;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      input::placeholder{
+        width: 38%;
+        margin: auto;
+        padding: 15px 0;
+        /* background: rgba(0,0,0,0.1); */
+        color: black;
+        display: flex;
+        text-transform: uppercase;
+      }
+
+      .autocomplete-input{
+        color: aliceblue;
+        text-decoration: floralwhite;
+      }
+      .btn{
+        align-items: center;
+        -webkit-transition: all 150ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+      }
+    </style>
+
+<!--
+<div class="breadcrumb-agile">
+  <div aria-label="breadcrumb" style="color: #000000;">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item" style="color: #000000;" aria-current="page">Predict Company Stock</li>
+    </ol>
+  </div>
+</div>-->
+
+  <body><br><br><br>
+    <h3 style="align-items:center;width:max-content;padding:15px;">Predict Company Stock</h3>><br><br><br>
+    <!-- bar chart canvas element -->
+    <div class="row">
+      <div class="col s12">
+        <div class="row">
+          <div class="input-field col s12">
+            <form action="/predictionofprice" method="post" autocomplete="off">
+              <input type="text" id="autocomplete-input" name="company" placeholder="Please enter company name" class="autocomplete" required><br><br><br>
+              <input type="date" name="date1" required><br><br>
+              <center><input class="btn" type="submit" value="submit"/></center>
+            </form>
+          </div><br>
+        </div><br>
+      </div><br>
+    </div>
+  </body>
+  <script>
+    $(document).ready(function(){
+      $('input.autocomplete').autocomplete({
+        data: {{values | safe}}
+      });
+    });
+  </script>
+
+{% endblock%}

@@ -1,0 +1,95 @@
+{% extends 'header1.html'%}
+{% block content %}
+
+<script src='/static/js/Chart.min.js'></script>
+<style>
+    h3{
+        width: 38%;
+        margin: auto;
+        padding: 15px 0;
+        background: rgba(0,0,0,0.1);
+        color: black;
+        display: flex;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    input::placeholder{
+        width: 38%;
+        margin: auto;
+        padding: 15px 0;
+        /* background: rgba(0,0,0,0.1); */
+        color: black;
+        display: flex;
+        text-transform: uppercase;
+    }
+
+    .autocomplete-input{
+        color: aliceblue;
+        text-decoration: floralwhite;
+    }
+    .btn{
+        align-items: center;
+        -webkit-transition: all 150ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    }
+</style>
+
+<div class="breadcrumb-agile">
+    <div aria-label="breadcrumb" style="color: #000000;">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/index">Home</a>
+            </li>
+            <li class="breadcrumb-item" style="color: #000000;" aria-current="page">Prediction</li>
+        </ol>
+    </div>
+</div>
+
+<div class="subscribe-info-w3l text-center py-5">
+    <div class="container py-xl-5 py-lg-3">
+  <center><h2>{{stockname}}  {{symbolis}} <img src="{{user_image}}" alt="userimage" height="80px" width="140px"></h2></center><br><br>
+  <center><h3 class="tittle text-center text-uppercase text-dark font-weight-bold mb-sm-4 mb-3">Predicted Future Value</h3></center><br><br>
+        <!-- <form action="/predictionofprice" method="post">
+            <div class="form-group row">
+                <label for="example-date-input" class="col-2 col-form-label">Start Date</label>
+                <div class="col-10">
+                    <input type="text" id="autocomplete-input" name="company" placeholder="Please enter company name" class="autocomplete"><br><br>
+                  
+                    <input class="form-control" type="date" name="date1" value="2021-03-21" id="example-date-input">
+                </div><br><br><br>
+                
+                <div class="col-10">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form> -->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Your Selected Date</th>
+                    <th>Predicted Price</th>
+                    <th>Accuracy of Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="table-primary">{{dt}}</td>
+                    <td class="table-danger">{{priceis}}</td>
+                    <td class="table-success">{{accu*10}}</td>
+                    
+                </tr>   
+            </tbody>
+        </table>
+        
+    </div>
+</div>
+                            
+<!-- <script>
+    $(document).ready(function(){
+      $('input.autocomplete').autocomplete({
+        data: {{val | safe}}
+      });
+    });
+  </script> -->
+
+{% endblock %}

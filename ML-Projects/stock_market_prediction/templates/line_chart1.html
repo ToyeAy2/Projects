@@ -1,0 +1,483 @@
+{% extends 'header1.html'%}
+{% block content %}
+<!-- <link rel="stylesheet" href= "/static/css/style-starter1.css"> -->
+<!-- <link href="//fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"> -->
+<!-- <meta charset="utf-8" /> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+
+<script src="/static/js/Chart.min.js"></script>
+
+<style>
+  #column1 { 
+    background: #D1FF36;  
+    position: absolute;
+    overflow-y: scroll;
+    height: 350px;
+    width: 550px;
+    color: antiquewhite;
+  } 
+  #column2 { 
+    background: #D1FF36;  
+    position: absolute;
+    overflow-y: scroll;
+    height: 350px;
+    width: 250px;
+  } 
+  #column3 { 
+    background: #D1FF36; 
+    position: absolute;
+    overflow-y: scroll;
+    height: 350px;
+    width: 250px;
+  }
+  #column4 { 
+    background: #D1FF36;
+    position: absolute;
+    overflow-y: scroll;
+    height: 350px;
+    width: 300px;
+  } 
+</style>
+
+<div class="breadcrumb-agile">
+  <div aria-label="breadcrumb" style="color: #000000;">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="/" style="color: #000000;">Back</a>
+      </li>
+      <li class="breadcrumb-item"  aria-current="page">
+      <a style="color: #f44336;">Time Series Comparison Graph</a>
+      </li>
+      <li class="breadcrumb-item" aria-current="page">
+      <a style="color: #000000;" href="/fgraph">Future Time Series Comparison Graph</a>
+      </li>
+    </ol>
+  </div>
+</div>
+
+  <center><h4>Time Series Comparison Graph of {{stockname}} and {{stockname2}}</h4></center>
+	<div style="width:95%;padding:5%"><canvas id="myChart" width="600" height="400"></canvas> </div>
+  <body>
+		<div class="w3ls-footer-grids py-sm-4 py-3" style="width:95%;padding:5%">
+      <center><h3>Stock Information</h3></center>
+      <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Point selected:</th>
+                <th>Current market price:</th>
+                <th>Current status of stock:</th>
+                <th>Data info:</th>
+                <th>News</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="table-primary" id="pointSelected" ></td>
+                <td class="table-danger" id="dataofthatpoint"></td>
+                <td class="table-success" id="qouteofthatpoint"></td>
+                <td class="table-warning" id="datais"></td>
+                <td class="table-warning">
+                  {% for i,j in flst %}
+                  <br>
+                  <div class="container">
+                    <a href="{{j}}" class="link-success">{{i}}</a>
+                  </div>
+                  <br>
+                  {% endfor %}
+
+                  {% for m,n in flst2 %}
+                  <div class="container">
+                    <a href="{{n}}" class="link-success">{{m}}</a>
+                  </div>
+                  {% endfor %}
+                </td>
+            </tr>   
+        </tbody>
+    </table>
+    
+  </div>
+  </body>
+    <!-- bar chart canvas element -->
+
+  <script>
+      // Global parameters:
+      // do not resize the chart canvas when its container does (keep at 600x400px)
+    Chart.defaults.global.responsive = true;
+
+      // define the chart data
+      var chartData = {
+      labels : [{% for item in labels %}
+                   "{{item}}",
+                  {% endfor %}],
+      datasets : [{
+        label: '{{ legend }}',
+        fill: true,
+        lineTension: 0.1,
+        backgroundColor: "rgba(75,192,192,0.4)",
+        borderColor: "rgba(75,192,192,1)",
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: 'miter',
+        pointBorderColor: "rgba(75,192,192,1)",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+        pointHoverBorderColor: "rgba(220,220,220,1)",
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data : [{% for item in values %}
+                      {{item}},
+                    {% endfor %}],
+        spanGaps: false
+      },
+      {
+        label: '{{ legend }}',
+        fill: true,
+        lineTension: 0.1,
+        backgroundColor: "rgba(80,180,196,0.5)",
+        borderColor: "rgba(255,0,0,1)",
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: 'miter',
+        pointBorderColor: "rgba(255,0,0,1)",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "rgba(255,0,0,1)",
+        pointHoverBorderColor: "rgba(220,220,220,1)",
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data : [{% for item in values2 %}
+                      {{item}},
+                    {% endfor %}],
+        spanGaps: false
+      }
+    ]
+    }
+
+      // get chart canvas
+    var holder = document.getElementById("myChart");
+    var ctx = document.getElementById("myChart").getContext("2d");
+
+      // create the chart using the chart canvas
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: chartData,
+      options: {
+        tooltips: {
+          enabled: true,
+          mode: 'single',
+          callbacks: {
+            label: function(tooltipItems, data) {
+              return tooltipItems.yLabel + ' dollar';
+            }
+          }
+        },
+      }
+    });
+      // get the text element below the chart
+      var pointSelected = document.getElementById("pointSelected");
+      var valueis='{{symbolis}}';
+      fetchstockprice(valueis);
+
+      setInterval(function(){ 
+        fetchcurrentmarketprice(valueis); 
+        fetchcurrentmarketqoute(valueis); 
+      }, 12000);
+
+      // get the text element below the chart
+      // var pointSelected = document.getElementById("pointSelected");
+      // var valueis2='{{symbolis2}}';
+      // fetchstockprice(valueis2);
+
+      // setInterval(function(){ 
+      //   fetchcurrentmarketprice(valueis2); 
+      //   fetchcurrentmarketqoute(valueis2); 
+      // }, 12000);
+
+
+      function functiontest(val){
+        var rawText =val;
+        completenews.innerHTML = '';
+        dataop='';
+        $.get("/parsenews", { msg: rawText }).done(function(data)
+        {
+          data1 = data;
+          completenews.innerHTML = 'Complete news is <br> ' + data1;
+                          
+        });
+      }
+
+
+	    function getBotResponse2(val){
+        var rawText =val;
+        dataop='';
+        $.get("/price", { msg: rawText }).done(function(data){
+          Object.keys(data).forEach(function(key) {
+            console.log(key + " " + data[key]);
+            dataop= dataop+'<tr><td>' + key +'</td><td> '+ data[key]+' </td></tr>';
+          });
+          data1 ='<table>'+ dataop+'</table>';
+          datais.innerHTML = 'Price at this time is:-<br> ' + data1;                     
+        });
+      }
+			
+			
+	    function fetchstockprice(val){
+        var rawText =val;
+        dataop1='';
+        $.get("/futurepriceprediction", { msg: rawText }).done(function(data){
+          Object.keys(data).forEach(function(key) {
+            console.log(key + " " + data[key]);
+            dataop1= dataop1+'<tr><td>' + key +'</td><td> '+ data[key]+'</td></tr>';
+          });
+          data2 ='<table>'+ dataop1+'</table>';
+					stockfuture.innerHTML = 'Price at this time is:-<br> ' + data2;          
+        });
+      }		
+			
+	
+	    function fetchcurrentmarketprice(val){
+        var rawText =val;
+        dataop='';
+        $.get("/fetchprice", { msg: rawText }).done(function(data){
+          console.log('price current :' + data);
+          data1 = data;
+					dataofthatpoint.innerHTML = 'Current market price is:-<br> ' + data1;
+                    
+        });
+      }
+			
+      function fetchcurrentmarketqoute(val){
+        var rawText =val;
+        dataop='';
+        $.get("/getqoutetableval", { msg: rawText }).done(function(data){
+          console.log('Current status of stock :' + data);
+          data12 = data;
+					qouteofthatpoint.innerHTML = 'Current status of stock:-<br> ' + data12;
+        });
+      }
+			
+        // create a callback function for updating the selected index on the chart
+      holder.onclick = function(evt){
+        var activePoint = myChart.getElementAtEvent(evt);
+        console.log(activePoint);
+        console.log('x:' + activePoint[0]._view.x);
+        console.log('maxWidth: ' + activePoint[0]._xScale.maxWidth);
+        console.log('y: ' + activePoint[0]._view.y);
+        console.log('index: ' + activePoint[0]._index);
+        pointSelected.innerHTML = 'Point selected... index: ' + activePoint[0]._index;
+        getBotResponse2(activePoint[0]._index);
+      };
+
+      // <!-- Bar and Pie Chart -->
+      Chart.defaults.global.defaultFontColor = 'Black';
+        let ctxLine,
+            ctxBar,
+            ctxPie,
+            optionsLine,
+            optionsBar,
+            optionsPie,
+            configLine,
+            configBar,
+            configPie,
+            lineChart;
+        barChart, pieChart;
+        // DOM is ready
+        $(function () {
+            drawLineChart(); // Line Chart
+            drawBarChart(); // Bar Chart
+            drawPieChart(); // Pie Chart
+
+            $(window).resize(function () {
+                updateLineChart();
+                updateBarChart();                
+            });
+        })
+  const width_threshold = 480;
+  function drawLineChart() {
+    if ($("#lineChart").length) {
+      ctxLine = document.getElementById("lineChart").getContext("2d");
+      optionsLine = {
+        scales: {
+          yAxes: [
+            {scaleLabel: {display: true,labelString: "Hits" }
+            }
+          ]
+        }
+      };
+      optionsLine.maintainAspectRatio = $(window).width() < width_threshold ? false : true;
+      configLine = {
+        type: "line",
+        data: {labels: ["Negative", "Neutral", "Positive"],
+          datasets: [
+            {
+              label: "Positive tweets",
+              //data: [88, 68, 79, 57, 50, 55, 70], [{{negative_count}}, {{neutral_count}}, {{positive_count}}]
+              data:[{{positive_count}}],
+              fill: false,
+              borderColor: "rgb(75, 192, 192)",
+              cubicInterpolationMode: "monotone",
+              pointRadius: 0
+            },
+            {
+              label: "Negative tweets",
+              data: [{{negative_count}}],
+              fill: false,
+              borderColor: "rgba(255,99,132,1)",
+              cubicInterpolationMode: "monotone",
+              pointRadius: 0
+            },
+            {
+              label: "Neutral Tweets",
+              data: [{{neutral_count}}],
+              fill: false,
+              borderColor: "rgba(153, 102, 255, 1)",
+              cubicInterpolationMode: "monotone",
+              pointRadius: 0
+            }
+          ]
+        },
+        options: optionsLine
+      };
+
+      lineChart = new Chart(ctxLine, configLine);
+    }
+  }
+
+  function drawBarChart() {
+    if ($("#barChart").length) {
+      ctxBar = document.getElementById("barChart").getContext("2d");
+
+      optionsBar = {
+        responsive: true,
+        scales: {
+          yAxes: [
+            {
+              barPercentage: 0.2,
+              ticks: {
+                beginAtZero: true
+              },
+              scaleLabel: {
+                display: true,
+                labelString: "Hits"
+              }
+            }
+          ]
+        }
+      };
+
+      optionsBar.maintainAspectRatio =
+        $(window).width() < width_threshold ? false : true;
+
+      /**
+       * COLOR CODES
+       * Red: #F7604D
+       * Aqua: #4ED6B8
+       * Green: #A8D582
+       * Yellow: #D7D768
+       * Purple: #9D66CC
+       * Orange: #DB9C3F
+       * Blue: #3889FC
+       */
+
+      configBar = {
+        type: "horizontalBar",
+        data: {
+          labels: ["Negative", "Neutral", "Positive"],
+          datasets: [
+            {
+              label: "# of Tweets",
+              //data: [33, 40, 28],
+              data: [{{negative_count}}, {{neutral_count}}, {{positive_count}}],
+              backgroundColor: [
+                "#F7604D",
+                "#4ED6B8",
+                "#A8D582"
+              ],
+              borderWidth: 0
+            }
+          ]
+        },
+        options: optionsBar
+      };
+
+      barChart = new Chart(ctxBar, configBar);
+    }
+  }
+
+  function drawPieChart() {
+    if ($("#pieChart").length) {
+      var chartHeight = 300;
+
+      $("#pieChartContainer").css("height", chartHeight + "px");
+
+      ctxPie = document.getElementById("pieChart").getContext("2d");
+
+      optionsPie = {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            left: 10,
+            right: 10,
+            top: 10,
+            bottom: 10
+          }
+        },
+        legend: {
+          position: "top"
+        }
+      };
+
+      configPie = {
+        type: "pie",
+        data: {
+          datasets: [
+            {
+              //data: [18.24, 6.5, 9.15],
+              data: [{{negative_count}}, {{positive_count}}, {{neutral_count}}],
+              backgroundColor: ["#F7604D", "#4ED6B8", "#A8D582"],
+              label: "Storage"
+            }
+          ],
+          labels: [
+            "Negative",
+            "Positive",
+            "Neutral"
+          ]
+        },
+        options: optionsPie
+      };
+
+      pieChart = new Chart(ctxPie, configPie);
+    }
+  }
+
+  function updateLineChart() {
+    if (lineChart) {
+      lineChart.options = optionsLine;
+      lineChart.update();
+    }
+  }
+
+  function updateBarChart() {
+    if (barChart) {
+      barChart.options = optionsBar;
+      barChart.update();
+    }
+  }
+
+
+  </script>
+    
+{% endblock %}
