@@ -1,3 +1,5 @@
+This is the project I submitted for my computer science dissertation focussed on stock market trend prediction using machine learning techniques. Please read the 'Final Report' pdf file for the full report.
+
 ## Synopsis
 
 Examples for using the Chart.js library in a Flask web application for creating line charts.
