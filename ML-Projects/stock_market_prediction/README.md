@@ -2,6 +2,7 @@ This is the project I submitted for my computer science dissertation focussed on
 
 ## Synopsis
 
+Instructions for uploading data are contained within the final report pdf file.
 Examples for using the Chart.js library in a Flask web application for creating line charts.
 
 ## How to Run
